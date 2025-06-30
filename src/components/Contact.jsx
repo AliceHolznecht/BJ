@@ -15,14 +15,7 @@ const Contact = () => {
             className="special-font !md:text-[6.2rem] w-full font-bj !text-5xl !font-black !leading-[.9]"
           />
 
-          <a
-            href="https://www.linkedin.com/in/brynner-jonathan-46925228b?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-10 cursor-pointer"
-          >
-            <Button title="contact me" />
-          </a>
+          <Button title="contact me" containerClass="mt-10 cursor-pointer" />
         </div>
       </div>
     </div>
