@@ -17,29 +17,29 @@ const soundtracks = {
 };
 
 const imageAssets = [
-  "img/about.jpg",
-  "videos/feature-1.jpg",
-  "videos/feature-2.jpg",
-  "videos/feature-3.jpg",
-  "videos/feature-5.jpg",
-  "videos/feature-6.jpg",
-  "videos/阿勒泰.jpg",
-  "videos/伊犁 (2).jpg",
-  "videos/伊犁 (3).jpg",
-  "videos/舟山.jpg",
-  "videos/舟山 (2).jpg",
-  "videos/舟山 (3).jpg",
-  "videos/Melbourne.jpg",
-  "videos/北京市.jpg",
-  "videos/万宁.jpg",
-  "videos/伊犁.jpg",
+  "/img/about.jpg",
+  "/videos/feature-1.jpg",
+  "/videos/feature-2.jpg",
+  "/videos/feature-3.jpg",
+  "/videos/feature-5.jpg",
+  "/videos/feature-6.jpg",
+  "/videos/阿勒泰.jpg",
+  "/videos/伊犁 (2).jpg",
+  "/videos/伊犁 (3).jpg",
+  "/videos/舟山.jpg",
+  "/videos/舟山 (2).jpg",
+  "/videos/舟山 (3).jpg",
+  "/videos/Melbourne.jpg",
+  "/videos/北京市.jpg",
+  "/videos/万宁.jpg",
+  "/videos/伊犁.jpg",
 ];
 
 const videoAssets = [
-  "videos/hero-1.mp4",
-  "videos/hero-2.mp4",
-  "videos/hero-3.mp4",
-  "videos/hero-4.mp4",
+  "/videos/hero-1.mp4",
+  "/videos/hero-2.mp4",
+  "/videos/hero-3.mp4",
+  "/videos/hero-4.mp4",
 ];
 
 const allAssets = [...Object.values(soundtracks), ...imageAssets, ...videoAssets];
