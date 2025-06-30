@@ -1,3 +1,4 @@
+// src/components/Hero.jsx
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/all";
@@ -13,22 +14,9 @@ const Hero = () => {
   const [currentIndex, setCurrentIndex] = useState(1);
   const [hasClicked, setHasClicked] = useState(false);
 
-  const [loading, setLoading] = useState(true);
-  const [loadedVideos, setLoadedVideos] = useState(0);
-
   const totalVideos = 4;
   const nextVdRef = useRef(null);
   const heroRef = useRef(null);
-
-  const handleVideoLoad = () => {
-    setLoadedVideos((prev) => prev + 1);
-  };
-
-  useEffect(() => {
-    if (loadedVideos === totalVideos - 1) {
-      setLoading(false);
-    }
-  }, [loadedVideos]);
 
   // Prevent scrolling past the top of the page
   useEffect(() => {
@@ -59,7 +47,6 @@ const Hero = () => {
 
   const handleMiniVdClick = () => {
     setHasClicked(true);
-
     setCurrentIndex((prevIndex) => (prevIndex % totalVideos) + 1);
   };
 
@@ -112,17 +99,6 @@ const Hero = () => {
 
   return (
     <div ref={heroRef} className="relative h-dvh w-screen overflow-x-hidden">
-      {loading && (
-        <div className="flex-center absolute z-[100] h-dvh w-screen overflow-hidden bg-violet-50">
-          {/* https://uiverse.io/G4b413l/tidy-walrus-92 */}
-          <div className="three-body">
-            <div className="three-body__dot"></div>
-            <div className="three-body__dot"></div>
-            <div className="three-body__dot"></div>
-          </div>
-        </div>
-      )}
-
       <div
         id="video-frame"
         className="relative z-10 h-dvh w-screen overflow-hidden rounded-lg bg-blue-75"
@@ -141,7 +117,6 @@ const Hero = () => {
                   muted
                   id="current-video"
                   className="size-64 origin-center scale-150 object-cover object-center"
-                  onLoadedData={handleVideoLoad}
                 />
               </div>
             </VideoPreview>
@@ -154,7 +129,6 @@ const Hero = () => {
             muted
             id="next-video"
             className="absolute-center invisible absolute z-20 size-64 object-cover object-center"
-            onLoadedData={handleVideoLoad}
           />
           <video
             src={getVideoSrc(
@@ -164,7 +138,6 @@ const Hero = () => {
             loop
             muted
             className="absolute left-0 top-0 size-full object-cover object-center"
-            onLoadedData={handleVideoLoad}
           />
         </div>
 
