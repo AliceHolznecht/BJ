@@ -312,9 +312,6 @@ useEffect(() => {
               alt={`Story image ${index + 1}`}
               className="max-w-32 max-h-32 md:max-w-40 md:max-h-40 lg:max-w-48 lg:max-h-48 rounded-2xl"
             />
-            <div className="absolute top-0 left-0 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-sm pointer-events-none">
-              {index + 1}
-            </div>
           </div>
         ))}
       </div>
