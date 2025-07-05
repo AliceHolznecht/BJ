@@ -2,7 +2,7 @@ import { useState } from "react";
 import About from "./components/About";
 import Hero from "./components/Hero";
 import NavBar from "./components/Navbar";
-import Features from "./components/Features";
+import Story from "./components/Story";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 
@@ -26,8 +26,8 @@ function App() {
       <div onMouseEnter={() => setCurrentPage("about")}>
         <About />
       </div>
-      <div onMouseEnter={() => setCurrentPage("features")}>
-        <Features />
+      <div onMouseEnter={() => setCurrentPage("story")}>
+        <Story />
       </div>
       <div onMouseEnter={() => setCurrentPage("contact")}>
         <Contact />

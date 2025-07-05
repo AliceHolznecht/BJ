@@ -6,7 +6,7 @@ import { TiLocationArrow } from "react-icons/ti";
 
 import Button from "./Button";
 
-const navItems = ["About", "Portofolio", "Contact"];
+const navItems = ["About", "Work", "Contact"];
 
 const NavBar = ({ soundtrack }) => {
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);

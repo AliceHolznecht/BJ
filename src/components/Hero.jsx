@@ -1,15 +1,13 @@
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/all";
-import { TiLocationArrow } from "react-icons/ti";
 import { useEffect, useRef, useState } from "react";
-
-import Button from "./Button";
 import VideoPreview from "./VideoPreview";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const Hero = () => {
+  /* ────────────────────────────── state & refs ───────────────────────────── */
   const [currentIndex, setCurrentIndex] = useState(1);
   const [hasClicked, setHasClicked] = useState(false);
 
@@ -18,10 +16,12 @@ const Hero = () => {
 
   const totalVideos = 4;
   const nextVdRef = useRef(null);
-  const heroRef = useRef(null);
+  const heroRef   = useRef(null);
 
-  const handleVideoLoad = () => {
+  /* ────────────────────────────── video loader ───────────────────────────── */
+  const handleVideoLoad = (e) => {
     setLoadedVideos((prev) => prev + 1);
+    e.target.dataset.ready = "true";
   };
 
   useEffect(() => {
@@ -30,36 +30,56 @@ const Hero = () => {
     }
   }, [loadedVideos]);
 
-  // Prevent scrolling past the top of the page
+  /* ─────────── prevent overscroll when at the very top (unchanged) ───────── */
   useEffect(() => {
     const preventOverscroll = (e) => {
-      if (window.scrollY <= 0 && e.deltaY < 0) {
-        e.preventDefault();
-      }
+      if (window.scrollY <= 0 && e.deltaY < 0) e.preventDefault();
     };
-
     const preventTouchOverscroll = (e) => {
-      if (window.scrollY <= 0) {
-        e.preventDefault();
-      }
+      if (window.scrollY <= 0) e.preventDefault();
     };
 
-    // Add wheel event listener for mouse scroll
-    window.addEventListener('wheel', preventOverscroll, { passive: false });
-    
-    // Add touch event listeners for mobile
-    window.addEventListener('touchmove', preventTouchOverscroll, { passive: false });
+    window.addEventListener("wheel", preventOverscroll, { passive: false });
+    window.addEventListener("touchmove", preventTouchOverscroll, {
+      passive: false,
+    });
 
-    // Cleanup
     return () => {
-      window.removeEventListener('wheel', preventOverscroll);
-      window.removeEventListener('touchmove', preventTouchOverscroll);
+      window.removeEventListener("wheel", preventOverscroll);
+      window.removeEventListener("touchmove", preventTouchOverscroll);
     };
   }, []);
 
+  /* ───────────────────────────── autoplay control ────────────────────────── */
+  useGSAP(
+    () => {
+      const section = heroRef.current;
+      if (!section) return;
+
+      const videos = gsap.utils.toArray(section.querySelectorAll("video"));
+
+      const playVideos = () =>
+        videos.forEach((v) => v.dataset.ready && v.play?.().catch(() => {}));
+      const pauseVideos = () => videos.forEach((v) => v.pause?.());
+
+      const st = ScrollTrigger.create({
+        trigger: section,
+        start: "top bottom",
+        end: "bottom top",    
+        onEnter:      playVideos,
+        onEnterBack:  playVideos,
+        onLeave:      pauseVideos,
+        onLeaveBack:  pauseVideos,
+      });
+
+      return () => st.kill();
+    },
+    { dependencies: [] }
+  );
+
+  /* ────────────────── click → swap preview / hero animation ─────────────── */
   const handleMiniVdClick = () => {
     setHasClicked(true);
-
     setCurrentIndex((prevIndex) => (prevIndex % totalVideos) + 1);
   };
 
@@ -84,12 +104,10 @@ const Hero = () => {
         });
       }
     },
-    {
-      dependencies: [currentIndex],
-      revertOnUpdate: true,
-    }
+    { dependencies: [currentIndex], revertOnUpdate: true }
   );
 
+  /* ─────────────────────── fancy frame morph scroll anim ─────────────────── */
   useGSAP(() => {
     gsap.set("#video-frame", {
       clipPath: "polygon(14% 0, 72% 0, 88% 90%, 0 95%)",
@@ -97,7 +115,7 @@ const Hero = () => {
     });
     gsap.from("#video-frame", {
       clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
-      borderRadius: "0% 0% 0% 0%",
+      borderRadius: "0",
       ease: "power1.inOut",
       scrollTrigger: {
         trigger: "#video-frame",
@@ -108,13 +126,14 @@ const Hero = () => {
     });
   });
 
+  /* ─────────────────────────── helpers / JSX ─────────────────────────────── */
   const getVideoSrc = (index) => `videos/hero-${index}.mp4`;
 
   return (
     <div ref={heroRef} className="relative h-dvh w-screen overflow-x-hidden">
+      {/* loader ------------------------------------------------------------ */}
       {loading && (
         <div className="flex-center absolute z-[100] h-dvh w-screen overflow-hidden bg-violet-50">
-          {/* https://uiverse.io/G4b413l/tidy-walrus-92 */}
           <div className="three-body">
             <div className="three-body__dot"></div>
             <div className="three-body__dot"></div>
@@ -123,11 +142,13 @@ const Hero = () => {
         </div>
       )}
 
+      {/* video frame ------------------------------------------------------- */}
       <div
         id="video-frame"
         className="relative z-10 h-dvh w-screen overflow-hidden rounded-lg bg-blue-75"
       >
         <div>
+          {/* tiny preview -------------------------------------------------- */}
           <div className="mask-clip-path absolute-center absolute z-50 size-64 cursor-pointer overflow-hidden rounded-lg">
             <VideoPreview>
               <div
@@ -147,6 +168,7 @@ const Hero = () => {
             </VideoPreview>
           </div>
 
+          {/* grows to full size on click ----------------------------------- */}
           <video
             ref={nextVdRef}
             src={getVideoSrc(currentIndex)}
@@ -156,6 +178,8 @@ const Hero = () => {
             className="absolute-center invisible absolute z-20 size-64 object-cover object-center"
             onLoadedData={handleVideoLoad}
           />
+
+          {/* full-screen background --------------------------------------- */}
           <video
             src={getVideoSrc(
               currentIndex === totalVideos - 1 ? 1 : currentIndex
@@ -168,26 +192,27 @@ const Hero = () => {
           />
         </div>
 
+        {/* overlay text ---------------------------------------------------- */}
         <h1 className="special-font hero-heading absolute bottom-5 right-5 z-40 text-blue-75">
-          CR<b>A</b>FTED
+          E<b>x</b>perie<b>n</b>ce
         </h1>
 
         <div className="absolute left-0 top-0 z-40 size-full">
           <div className="mt-24 px-5 sm:px-10">
             <h1 className="special-font hero-heading text-blue-100">
-              Motio<b>n</b>
+              Redefi<b>n</b>e
             </h1>
 
             <p className="mb-5 max-w-64 font-robert-regular text-blue-100">
+              {/* your subtitle / tagline here */}
             </p>
-
-            
           </div>
         </div>
       </div>
 
+      {/* bottom-right shadow headline ------------------------------------- */}
       <h1 className="special-font hero-heading absolute bottom-5 right-5 text-black">
-        CR<b>A</b>FTE<b>D</b>
+        E<b>x</b>perie<b>n</b><b>c</b>e
       </h1>
     </div>
   );

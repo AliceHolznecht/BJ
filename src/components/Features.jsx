@@ -1,6 +1,8 @@
 import { useRef, useEffect, useCallback } from "react";
 import { TiLocationArrow } from "react-icons/ti";
 import { gsap } from "gsap";
+import AnimatedTitle from "./AnimatedTitle";
+
 
 export const BentoTilt = ({ children, className = "" }) => (
   <div className={`${className} rounded-3xl`}>{children}</div>
@@ -394,12 +396,10 @@ const Features = () => {
     <section id="portofolio" className="bg-black pb-52">
       <div className="container mx-auto px-3 md:px-10">
         <div className="px-5 py-32">
-          <p className="font-circular-web text-lg text-blue-50">I'm Brynner</p>
-          <p className="max-w-md font-circular-web text-lg text-blue-50 opacity-50">
-            Photographer, 3D artist, and front-end developer who cares about
-            design. My focus is on precise integration and crafting innovative
-            interactions.
-          </p>
+          <AnimatedTitle
+            title="Featured Work"
+            className="special-font !md:text-[6.2rem] w-full font-bj !text-5xl !font-black !leading-[.9]"
+          />
         </div>
         <BentoTilt className="relative mb-7 h-96 w-full overflow-hidden rounded-3xl md:h-[65vh]">
           <AutoScrollCarousel items={mainCarouselItems} direction="horizontal" />
